@@ -1,8 +1,7 @@
 require 'net/https'
 require 'cgi'
 require 'rubygems'
-require 'bundler/setup'
-Bundler.require
+require 'json'
 
 class IPRelay
   # settings is a hash for the iP Relay connection details
