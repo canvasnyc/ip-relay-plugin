@@ -19,18 +19,23 @@ class IPRelay
     if @settings[:basic_auth]
       request.basic_auth(@settings[:username], @settings[:password])
     end
+    result = {:error => true}
     begin
       response = Net::HTTP.new(uri.host, uri.port).start { |http| http.request(request) }
       if response.code == "200"
-        puts "iP Relay #{destination} #{contents} successfully sent"
+        result.merge!({
+          :error => false,
+          :message => "iP Relay #{destination} #{contents} successfully sent"
+        })
       else
-        puts "iP Relay #{destination} #{contents} failure, response code was #{response.code}"
+        result[:message] = "iP Relay #{destination} #{contents} failure, response code was #{response.code}"
       end
     rescue Exception => e
-      puts "iP Relay #{destination} #{contents} failure, exception was #{e}"
+      result[:message] = "iP Relay #{destination} #{contents} failure, exception was #{e}"
     end
 
-    response
+    puts result[:message]
+    result
   end
 end
 
